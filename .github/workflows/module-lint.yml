@@ -96,7 +96,7 @@ jobs:
         run: node ./.github/scripts/determine-slack-payload-for-package.js
         env:
           PACKAGE_NAME: ${{ matrix.project }}
-          MODULE_LINT_OUTPUT_FILE: /tmp/module-lint-report
+          MODULE_LINT_OUTPUT_FILE: /tmp/module-lint-report/module-lint-report--${{ matrix.project }}
           SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
           SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
       - name: Post to Slack
