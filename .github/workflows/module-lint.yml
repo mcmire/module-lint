@@ -41,9 +41,18 @@ jobs:
     needs: run-module-lint
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn --immutable
       - name: Determine Slack payload
         id: slack-payload
-        run: node .github/scripts/determine-initial-slack-payload.js
+        run: node ./.github/scripts/determine-initial-slack-payload.js
         env:
           MODULE_LINT_RESULT: ${{ needs.run-module-lint.result }}
       - name: Post to Slack
@@ -72,9 +81,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: module-lint-report--${{ matrix.project }}
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn --immutable
       - name: Determine Slack payload
         id: slack-payload
-        run: node .github/scripts/determine-slack-payload-for-package.js
+        run: node ./.github/scripts/determine-slack-payload-for-package.js
         env:
           PACKAGE_NAME: ${{ matrix.project }}
           MODULE_LINT_OUTPUT_FILE: /tmp/module-lint-report
