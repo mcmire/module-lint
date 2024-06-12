@@ -5,9 +5,4 @@ if [[ -z "$PROJECT_NAME" ]]; then
   exit 1
 fi
 
-{
-  echo 'OUTPUT<<EOF'
-  yarn run-tool "$PROJECT_NAME"
-  exitcode=$?
-  echo EOF
-} >> "$GITHUB_ENV"
+yarn run-tool "$PROJECT_NAME" | tee "/tmp/module-lint-report"
