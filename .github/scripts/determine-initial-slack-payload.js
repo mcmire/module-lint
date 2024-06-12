@@ -121,4 +121,4 @@ const slackPayload = {
   channel: "#temp-test-module-lint",
 };
 
-console.log(JSON.stringify(slackPayload, " ", 2));
+console.log(`SLACK_PAYLOAD=${JSON.stringify(slackPayload, " ", 2)}`);
