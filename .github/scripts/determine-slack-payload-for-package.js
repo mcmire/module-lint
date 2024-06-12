@@ -72,4 +72,4 @@ const slackPayload = {
   thread_ts: "THREAD_TS",
 };
 
-console.log(JSON.stringify(slackPayload, " ", 2));
+console.log(`PAYLOAD=${JSON.stringify(slackPayload, " ", 2)}`);

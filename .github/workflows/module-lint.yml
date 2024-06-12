@@ -26,12 +26,16 @@ jobs:
         run: yarn --immutable
       - name: Run module-lint
         id: module-lint
-        run: .github/scripts/run-module-lint.sh
+        run: |
+          yarn run-tool "$PROJECT_NAME" | tee /tmp/module-lint-report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_NAME: ${{ matrix.project }}
-    outputs:
-      module-lint-outcome: ${{ steps.module-lint.outcome }}
+      - name: Save report
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-lint-report--${{ matrix.project }}
+          path: /tmp/module-lint-report
   post-initial-message-to-slack:
     name: Post initial message to Slack
     needs: run-module-lint
@@ -41,7 +45,7 @@ jobs:
         id: slack-payload
         run: node .github/scripts/determine-initial-slack-payload.js
         env:
-          MODULE_LINT_OUTCOME: ${{ needs.run-module-lint.outputs.module-lint-outcome }}
+          MODULE_LINT_RESULT: ${{ needs.run-module-lint.result }}
       - name: Post to Slack
         id: initial-slack-message
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
@@ -64,18 +68,22 @@ jobs:
           - module-lint
           - utils
     steps:
+      - name: Load report for previous module-lint-run
+        uses: actions/download-artifact@v4
+        with:
+          name: module-lint-report--${{ matrix.project }}
       - name: Determine Slack payload
         id: slack-payload
         run: node .github/scripts/determine-slack-payload-for-package.js
         env:
           PACKAGE_NAME: ${{ matrix.project }}
-          MODULE_LINT_OUTPUT_FILE: /tmp/module-lint/${{ matrix.project }}/output
+          MODULE_LINT_OUTPUT_FILE: /tmp/module-lint-report
           SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
           SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
       - name: Post to Slack
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
-          payload: ${{ steps.slack-payload.outputs.executable }}
+          payload: ${{ steps.slack-payload.outputs.SLACK_PAYLOAD }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

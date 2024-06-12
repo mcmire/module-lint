@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 const executableName = process.argv[1];
-const moduleLintOutcome = process.env.MODULE_LINT_OUTCOME;
+const moduleLintResult = process.env.MODULE_LINT_RESULT;
 
-if (moduleLintOutcome === undefined) {
-  console.log("Missing environment variable MODULE_LINT_OUTCOME.");
+if (moduleLintResult === undefined) {
+  console.log("Missing environment variable MODULE_LINT_RESULT.");
   process.exit(1);
 }
 
-const blocks = (moduleLintOutcome === "success") ? [
+const blocks = (moduleLintResult === "success") ? [
   {
     "type": "rich_text",
     "elements": [
