@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const executableName = process.argv[1];
 const packageName = process.env.PACKAGE_NAME;
 const moduleLintOutputFile = process.env.MODULE_LINT_OUTPUT_FILE;
