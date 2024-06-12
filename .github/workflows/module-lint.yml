@@ -81,6 +81,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: module-lint-report--${{ matrix.project }}
+          path: /tmp/module-lint-report
       - name: Check out repository
         uses: actions/checkout@v3
       - name: Install Node
