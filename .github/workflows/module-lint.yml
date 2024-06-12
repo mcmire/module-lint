@@ -27,7 +27,7 @@ jobs:
       - name: Run module-lint
         id: module-lint
         run: |
-          yarn run-tool "$PROJECT_NAME" | tee /tmp/module-lint-report
+          yarn run-tool "$PROJECT_NAME" | tee /tmp/module-lint-report.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_NAME: ${{ matrix.project }}
@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: module-lint-report--${{ matrix.project }}
-          path: /tmp/module-lint-report
+          path: /tmp/module-lint-report.txt
   post-initial-message-to-slack:
     name: Post initial message to Slack
     needs: run-module-lint
@@ -78,6 +78,7 @@ jobs:
           - utils
     steps:
       - name: Load report for previous module-lint-run
+        id: load-report
         uses: actions/download-artifact@v4
         with:
           name: module-lint-report--${{ matrix.project }}
@@ -96,7 +97,7 @@ jobs:
         run: node ./.github/scripts/determine-slack-payload-for-package.js
         env:
           PACKAGE_NAME: ${{ matrix.project }}
-          MODULE_LINT_OUTPUT_FILE: /tmp/module-lint-report/module-lint-report--${{ matrix.project }}
+          MODULE_LINT_OUTPUT_FILE: ${{ steps.load-report.outputs.download-path }}
           SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
           SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
       - name: Post to Slack
