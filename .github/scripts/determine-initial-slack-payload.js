@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const core = require('@actions/core');
+
 const executableName = process.argv[1];
 const moduleLintResult = process.env.MODULE_LINT_RESULT;
 
@@ -121,4 +123,5 @@ const slackPayload = {
   channel: "#temp-test-module-lint",
 };
 
-console.log(`SLACK_PAYLOAD=${JSON.stringify(slackPayload)}`);
+core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));
+

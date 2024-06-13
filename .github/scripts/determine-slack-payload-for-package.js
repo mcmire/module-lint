@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
+const core = require('@actions/core');
+
 const executableName = process.argv[1];
 const packageName = process.env.PACKAGE_NAME;
 const moduleLintOutputFile = process.env.MODULE_LINT_OUTPUT_FILE;
@@ -73,4 +75,4 @@ const slackPayload = {
   thread_ts: "THREAD_TS",
 };
 
-console.log(`SLACK_PAYLOAD=${JSON.stringify(slackPayload)}`);
+core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));
