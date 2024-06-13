@@ -131,4 +131,4 @@ const slackPayload = {
   channel: channelId,
 };
 
-core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));tex
+core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));
