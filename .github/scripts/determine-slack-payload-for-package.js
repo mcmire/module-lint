@@ -3,7 +3,6 @@
 const fs = require('fs');
 const core = require('@actions/core');
 
-const executableName = process.argv[1];
 const packageName = process.env.PACKAGE_NAME;
 const moduleLintOutputFile = process.env.MODULE_LINT_OUTPUT_FILE;
 const channelId = process.env.SLACK_CHANNEL_ID;
@@ -30,6 +29,8 @@ if (threadTs === undefined) {
 }
 
 const moduleLintOutput = fs.readFileSync(moduleLintOutputFile, "utf8");
+
+const text = `Report for MetaMask/${packageName}`;
 
 const blocks = {
   "type": "rich_text",
@@ -70,9 +71,10 @@ const blocks = {
 }
 
 const slackPayload = {
+  text,
   blocks,
-  channel: "CHANNEL_ID",
-  thread_ts: "THREAD_TS",
+  channel: channelId,
+  thread_ts: threadTs,
 };
 
 core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));

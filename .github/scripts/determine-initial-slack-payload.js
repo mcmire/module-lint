@@ -2,13 +2,20 @@
 
 const core = require('@actions/core');
 
-const executableName = process.argv[1];
 const moduleLintResult = process.env.MODULE_LINT_RESULT;
+const channelId = process.env.SLACK_CHANNEL_ID;
 
 if (moduleLintResult === undefined) {
   console.log("Missing environment variable MODULE_LINT_RESULT.");
   process.exit(1);
 }
+
+if (channelId === undefined) {
+  console.log("Missing environment variable SLACK_CHANNEL_ID.");
+  process.exit(1);
+}
+
+const text = "A new package standardization report is available. Open this thread to view more details.";
 
 const blocks = (moduleLintResult === "success") ? [
   {
@@ -117,11 +124,11 @@ const blocks = (moduleLintResult === "success") ? [
   ];
 
 const slackPayload = {
+  text,
   blocks,
   icon_url: "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
   username: "MetaMask Bot",
-  channel: "#temp-test-module-lint",
+  channel: channelId,
 };
 
-core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));
-
+core.setOutput('SLACK_PAYLOAD', JSON.stringify(slackPayload));tex

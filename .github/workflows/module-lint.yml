@@ -55,6 +55,7 @@ jobs:
         run: node ./.github/scripts/determine-initial-slack-payload.js
         env:
           MODULE_LINT_RESULT: ${{ needs.run-module-lint.result }}
+          SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
       - name: Post to Slack
         id: initial-slack-message
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
