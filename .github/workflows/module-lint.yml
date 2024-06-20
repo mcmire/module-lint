@@ -26,15 +26,7 @@ jobs:
         run: yarn --immutable
       - name: Run module-lint
         id: module-lint
-        run: |
-          yarn run-tool "$PROJECT_NAME" > /tmp/module-lint-report.txt
-          exitcode=$?
-          cat /tmp/module-lint-report.txt
-          if [[ $exitcode -eq 0 ]]; then
-            exit 0
-          elif [[ $exitcode -ne -127 ]]; then
-            exit 1
-          fi
+        run: .github/scripts/run-module-lint.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_NAME: ${{ matrix.project }}
