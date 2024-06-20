@@ -62,14 +62,16 @@ const blocks = [
           },
         ],
       },
+      {
+        type: 'rich_text_preformatted',
+        elements: [
+          {
+            type: 'text',
+            text: moduleLintOutput,
+          },
+        ],
+      },
     ],
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: moduleLintOutput,
-    },
   },
 ];
 
