@@ -11,8 +11,8 @@ exitcode=$?
 
 cat /tmp/module-lint-report.txt
 
-if [[ $exitcode -eq 0 ]]; then
-  exit 0
-elif [[ $exitcode -ne -127 ]]; then
+if [[ $exitcode -ne 0 && $exitcode -ne -127 ]]; then
   exit 1
+else
+  exit 0
 fi
