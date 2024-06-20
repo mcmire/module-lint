@@ -62,8 +62,7 @@ jobs:
         with:
           payload: ${{ steps.slack-payload.outputs.SLACK_PAYLOAD }}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     outputs:
       slack-thread-ts: ${{ steps.initial-slack-message.outputs.ts }}
   post-threaded-message-to-slack:
@@ -106,5 +105,4 @@ jobs:
         with:
           payload: ${{ steps.slack-payload.outputs.SLACK_PAYLOAD }}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
