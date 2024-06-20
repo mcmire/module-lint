@@ -24,7 +24,7 @@ if (threadTs === undefined) {
 }
 
 const moduleLintOutput = fs.readFileSync(
-  path.join(moduleLintRunDirectory, 'output.txt'),
+  path.join(moduleLintRunDirectory, `${packageName}--output.txt`),
   'utf8',
 );
 
