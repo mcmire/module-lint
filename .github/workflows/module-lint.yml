@@ -27,7 +27,14 @@ jobs:
       - name: Run module-lint
         id: module-lint
         run: |
-          yarn run-tool "$PROJECT_NAME" | tee /tmp/module-lint-report.txt
+          yarn run-tool "$PROJECT_NAME" > /tmp/module-lint-report.txt
+          exitcode=$?
+          cat /tmp/module-lint-report.txt
+          if [[ $exitcode -eq 0 ]]; then
+            exit 0
+          elif [[ $exitcode -ne -127 ]]; then
+            exit 1
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_NAME: ${{ matrix.project }}
