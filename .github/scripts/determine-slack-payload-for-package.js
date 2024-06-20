@@ -30,43 +30,45 @@ const moduleLintOutput = fs.readFileSync(
 
 const text = `Report for MetaMask/${packageName}`;
 
-const blocks = {
-  type: 'rich_text',
-  elements: [
-    {
-      type: 'rich_text_section',
-      elements: [
-        {
-          type: 'text',
-          text: ' ',
-        },
-        {
-          type: 'text',
-          text: 'Report for ',
-          style: {
-            bold: true,
+const blocks = [
+  {
+    type: 'rich_text',
+    elements: [
+      {
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'text',
+            text: ' ',
           },
-        },
-        {
-          type: 'link',
-          url: `https://github.com/MetaMask/${packageName}`,
-          text: `MetaMask/${packageName}`,
-          style: {
-            bold: true,
+          {
+            type: 'text',
+            text: 'Report for ',
+            style: {
+              bold: true,
+            },
           },
-        },
-        {
-          type: 'text',
-          text: ':\n\n',
-        },
-        {
-          type: 'text',
-          text: moduleLintOutput,
-        },
-      ],
-    },
-  ],
-};
+          {
+            type: 'link',
+            url: `https://github.com/MetaMask/${packageName}`,
+            text: `MetaMask/${packageName}`,
+            style: {
+              bold: true,
+            },
+          },
+          {
+            type: 'text',
+            text: ':\n\n',
+          },
+          {
+            type: 'text',
+            text: moduleLintOutput,
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const slackPayload = {
   text,
