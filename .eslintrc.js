@@ -18,6 +18,12 @@ module.exports = {
         sourceType: 'script',
       },
       extends: ['@metamask/eslint-config-nodejs'],
+      rules: {
+        // It's okay if this file has a shebang; it's meant to be executed
+        // directly.
+        'n/no-process-env': 'off',
+        'n/no-sync': 'off',
+      },
     },
 
     {
@@ -43,6 +49,7 @@ module.exports = {
 
   ignorePatterns: [
     '!.eslintrc.js',
+    '!.github/',
     '!.prettierrc.js',
     '.yarn/',
     'dist/',

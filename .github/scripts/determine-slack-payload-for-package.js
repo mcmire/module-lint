@@ -1,74 +1,72 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
 const core = require('@actions/core');
+const fs = require('fs');
+const path = require('path');
 
 const packageName = process.env.PACKAGE_NAME;
-const moduleLintOutputFile = process.env.MODULE_LINT_OUTPUT_FILE;
+const moduleLintRunDirectory = process.env.MODULE_LINT_RUN_DIRECTORY;
 const channelId = process.env.SLACK_CHANNEL_ID;
 const threadTs = process.env.SLACK_THREAD_TS;
 
 if (packageName === undefined) {
-  console.log("Missing environment variable PACKAGE_NAME.");
-  process.exit(1);
+  throw new Error('Missing environment variable PACKAGE_NAME.');
 }
 
-if (moduleLintOutputFile === undefined) {
-  console.log("Missing environment variable MODULE_LINT_OUTPUT_FILE.");
-  process.exit(1);
+if (moduleLintRunDirectory === undefined) {
+  throw new Error('Missing environment variable MODULE_LINT_RUN_DIRECTORY.');
 }
 
 if (channelId === undefined) {
-  console.log("Missing environment variable SLACK_CHANNEL_ID.");
-  process.exit(1);
+  throw new Error('Missing environment variable SLACK_CHANNEL_ID.');
 }
 
 if (threadTs === undefined) {
-  console.log("Missing environment variable SLACK_THREAD_TS.");
-  process.exit(1);
+  throw new Error('Missing environment variable SLACK_THREAD_TS.');
 }
 
-const moduleLintOutput = fs.readFileSync(moduleLintOutputFile, "utf8");
+const moduleLintOutput = fs.readFileSync(
+  path.join(moduleLintRunDirectory, 'output.txt'),
+  'utf8',
+);
 
 const text = `Report for MetaMask/${packageName}`;
 
 const blocks = {
-  "type": "rich_text",
-  "elements": [
+  type: 'rich_text',
+  elements: [
     {
-      "type": "rich_text_section",
-      "elements": [
+      type: 'rich_text_section',
+      elements: [
         {
-          "type": "text",
-          "text": " "
+          type: 'text',
+          text: ' ',
         },
         {
-          "type": "text",
-          "text": "Report for ",
-          "style": {
-            "bold": true
-          }
+          type: 'text',
+          text: 'Report for ',
+          style: {
+            bold: true,
+          },
         },
         {
-          "type": "link",
-          "url": `https://github.com/MetaMask/${packageName}`,
-          "text": `MetaMask/${packageName}`,
-          "style": {
-            "bold": true
-          }
+          type: 'link',
+          url: `https://github.com/MetaMask/${packageName}`,
+          text: `MetaMask/${packageName}`,
+          style: {
+            bold: true,
+          },
         },
         {
-          "type": "text",
-          "text": ":\n\n"
+          type: 'text',
+          text: ':\n\n',
         },
         {
-          "type": "text",
-          "text": moduleLintOutput
-        }
-      ]
-    }
-  ]
-}
+          type: 'text',
+          text: moduleLintOutput,
+        },
+      ],
+    },
+  ],
+};
 
 const slackPayload = {
   text,

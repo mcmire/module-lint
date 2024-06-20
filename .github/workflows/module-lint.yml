@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: module-lint-report--${{ matrix.project }}
-          path: /tmp/module-lint-report.txt
+          path: /tmp/module-lint-run
   post-initial-message-to-slack:
     name: Post initial message to Slack
     needs: run-module-lint
@@ -49,11 +49,17 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies
         run: yarn --immutable
+      - name: Load results for previous module-lint runs
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/module-lint-runs
+          pattern: module-lint-report--*
+          merge-multiple: true
       - name: Determine Slack payload
         id: slack-payload
         run: node ./.github/scripts/determine-initial-slack-payload.js
         env:
-          MODULE_LINT_RESULT: ${{ needs.run-module-lint.result }}
+          MODULE_LINT_RUNS_DIRECTORY: /tmp/module-lint-runs
           SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
       - name: Post to Slack
         id: initial-slack-message
@@ -97,7 +103,7 @@ jobs:
         run: node ./.github/scripts/determine-slack-payload-for-package.js
         env:
           PACKAGE_NAME: ${{ matrix.project }}
-          MODULE_LINT_OUTPUT_FILE: ${{ steps.load-report.outputs.download-path }}
+          MODULE_LINT_RUN_DIRECTORY: ${{ steps.load-report.outputs.download-path }}
           SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
           SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
       - name: Post to Slack

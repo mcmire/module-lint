@@ -5,11 +5,17 @@ if [[ -z "$PROJECT_NAME" ]]; then
   exit 1
 fi
 
-yarn run-tool "$PROJECT_NAME" > /tmp/module-lint-report.txt
+directory=/tmp/module-lint-run
+
+mkdir -p "$directory"
+
+yarn run-tool "$PROJECT_NAME" > "$directory/$PROJECT_NAME--output.txt"
 
 exitcode=$?
 
-cat /tmp/module-lint-report.txt
+echo $exitcode > "$directory/$PROJECT_NAME--exitcode.txt"
+
+cat "$directory/output.txt"
 
 if [[ $exitcode -ne 0 && $exitcode -ne 100 ]]; then
   exit 1
