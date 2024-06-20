@@ -58,15 +58,18 @@ const blocks = [
           },
           {
             type: 'text',
-            text: ':\n\n',
-          },
-          {
-            type: 'text',
-            text: moduleLintOutput,
+            text: ':',
           },
         ],
       },
     ],
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: moduleLintOutput,
+    },
   },
 ];
 
