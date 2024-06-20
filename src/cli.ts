@@ -17,7 +17,7 @@ main({
 })
   .then((isSuccessful) => {
     if (!isSuccessful) {
-      process.exitCode = -127;
+      process.exitCode = 100;
     }
   })
   .catch((error) => {
